@@ -1,0 +1,6 @@
+version introduce
+turing model init with random
+turing param cost with regulizer
+use output any result to generate distribution over any result, the dim can be adjusted 
+
+use  adadelta as update

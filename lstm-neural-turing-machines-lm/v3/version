@@ -1,0 +1,4 @@
+version introduce
+turing model init with random
+turing param cost with regulizer
+use output any result to generate distribution over any result, but memory used to generate weight and used to weighted sum is not the same

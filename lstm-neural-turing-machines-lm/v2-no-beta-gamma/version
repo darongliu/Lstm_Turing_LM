@@ -1,0 +1,7 @@
+version introduce
+turing model init with random
+turing param cost with regulizer
+use output any result to generate distribution over any result, the dim can be adjusted 
+
+use init
+two types of model 1.also init memory with word embedding 2.do not init memory
