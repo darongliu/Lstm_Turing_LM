@@ -89,7 +89,7 @@ def load_data(data_file_str, vocab, data_type):
 
 		# abandom too long sent in training set., too long sent will take too many time and decrease preformance
 		tokens_for_count = line.replace('\n','').split(' ')
-		if len(tokens_for_count) > 30 and data_type == 'train':
+		if len(tokens_for_count) > 50 and data_type == 'train':
 			continue
 
 		lines.append(tokens)
