@@ -89,7 +89,7 @@ def load_data(data_file_str, vocab, data_type):
 
 		# abandom too long sent in training set., too long sent will take too many time and decrease preformance
 		tokens_for_count = line.replace('\n','').split(' ')
-		if len(tokens_for_count) > 50 and data_type == 'train':
+		if len(tokens_for_count) > 30 and data_type == 'train':
 			continue
 
 		lines.append(tokens)
@@ -434,7 +434,7 @@ def training(args, vocab, train_data, train_lengths, valid_data, valid_lengths):
 		n_rest_example = len(valid_lengths) - minibatch_size * minibatch_idx
 		minibatch_valid_data, lengths = get_minibatch(valid_data, valid_lengths, n_rest_example, minibatch_idx)
 
-		minibatch_valid_ppl = model.ppl_fun(valid_data, valid_lengths)
+		minibatch_valid_ppl = model.ppl_fun(minibatch_valid_data, list(lengths))
 		valid_ppl = valid_ppl + minibatch_valid_ppl * sum(lengths)
 		valid_ppl = valid_ppl / sum(valid_lengths)
 		
