@@ -9,7 +9,7 @@ stack_size=1
 learning_rate=0.01
 minibatch_size=100
 max_epoch=10000
-save_model="model/full/pro"$projection_size".h"$hidden_size".mini"$minibatch_size".neuron"$neuron_type""
+save_model="model/pro"$projection_size".h"$hidden_size".mini"$minibatch_size".neuron"$neuron_type""
 
 
 # train
