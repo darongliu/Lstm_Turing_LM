@@ -430,12 +430,14 @@ def training(args, vocab, train_data, train_lengths, valid_data, valid_lengths):
 			valid_ppl = valid_ppl + minibatch_valid_ppl * sum(lengths)
 			
 		# last minibatch
-		minibatch_idx = minibatch_idx + 1
-		n_rest_example = len(valid_lengths) - minibatch_size * minibatch_idx
-		minibatch_valid_data, lengths = get_minibatch(valid_data, valid_lengths, n_rest_example, minibatch_idx)
+		if (minibatch_idx + 1) * minibatch_size != len(valid_lengths):
+			minibatch_idx = minibatch_idx + 1
+			n_rest_example = len(valid_lengths) - minibatch_size * minibatch_idx
+			minibatch_valid_data, lengths = get_minibatch(valid_data, valid_lengths, n_rest_example, minibatch_idx)
 
-		minibatch_valid_ppl = model.ppl_fun(minibatch_valid_data, list(lengths))
-		valid_ppl = valid_ppl + minibatch_valid_ppl * sum(lengths)
+			minibatch_valid_ppl = model.ppl_fun(minibatch_valid_data, list(lengths))
+			valid_ppl = valid_ppl + minibatch_valid_ppl * sum(lengths)
+
 		valid_ppl = valid_ppl / sum(valid_lengths)
 		
 
@@ -486,12 +488,14 @@ def testing(args, test_data, test_lengths):
 		test_ppl = test_ppl + minibatch_test_ppl * sum(lengths)
 		
 	# last minibatch
-	minibatch_idx = minibatch_idx + 1
-	n_rest_example = len(test_lengths) - minibatch_size * minibatch_idx
-	minibatch_test_data, lengths = get_minibatch(test_data, test_lengths, n_rest_example, minibatch_idx)
+	if (minibatch_idx + 1) * minibatch_size != len(test_lengths):
+		minibatch_idx = minibatch_idx + 1
+		n_rest_example = len(test_lengths) - minibatch_size * minibatch_idx
+		minibatch_test_data, lengths = get_minibatch(test_data, test_lengths, n_rest_example, minibatch_idx)
 
-	minibatch_test_ppl = model_load.ppl_fun(test_data, test_lengths)
-	test_ppl = test_ppl + minibatch_test_ppl * sum(lengths)
+		minibatch_test_ppl = model_load.ppl_fun(minibatch_test_data, list(lengths))
+		test_ppl = test_ppl + minibatch_test_ppl * sum(lengths)
+		
 	test_ppl = test_ppl / sum(test_lengths)
 
 	print "test ppl: %f" %test_ppl
