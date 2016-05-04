@@ -7,7 +7,9 @@ experiment2:
 experiment3:
 1.pretrained with lstm 
 2.hidden softmax pretrained with lstm softmax
-3.attention softmax pretrained with 0/random(unditermined)
+3.read softmax pretrained with lstm softmax
+experiment4:
+1.all train together
 
 [experiment1 version]
 1.use output lstm hidden to generate distribution over others output lstm hidden

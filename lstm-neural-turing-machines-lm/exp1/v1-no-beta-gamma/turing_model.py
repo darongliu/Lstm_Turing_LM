@@ -13,11 +13,14 @@ def build(P , mem_width , output_size) :
         params = P.values()
         #whether add P weight decay
         l2 = T.sum(0)
+        """
         for p in params:
             l2 = l2 + (p ** 2).sum()
         all_cost = cost + 1e-3 * l2 
+        """
+        all_cost = cost
         grads = [T.clip(g, -100, 100) for g in T.grad(all_cost, wrt=params)]
-        return updates.rmsprop(params, grads, learning_rate=lr)
+        return updates.momentum(params, grads, mu=0, learning_rate=lr)
     
     def init_parameter(name , value) :
         P[name] = value #used by getvalue
