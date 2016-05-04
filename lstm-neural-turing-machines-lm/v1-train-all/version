@@ -1,4 +1,0 @@
-version introduce
-turing model init with random
-turing param cost with regulizer
-use output lstm hidden to generate distribution over others output lstm hidden
