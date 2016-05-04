@@ -1,7 +1,7 @@
 #! /bin/bash
-train_file="../../data/train.small"
-valid_file="../../data/valid.small"
-test_file="../../data/test.small"
+train_file="../../../data/train.full"
+valid_file="../../../data/valid.full"
+test_file="../../../data/test.full"
 neuron_type="LSTM" # RNN/LSTM
 train_method="ALL"
 projection_size=50
@@ -11,8 +11,8 @@ learning_rate=1e-3
 minibatch_size=100
 improvement_rate=0.005
 max_epoch=1000
-save_model="model/small/pro"$projection_size".h"$hidden_size".mini"$minibatch_size".neuron"$neuron_type""
-load_model="../../../lstm-lm/531-lstm/model/small/pro"$projection_size".h"$hidden_size".mini"$minibatch_size".neuron"$neuron_type""
+save_model="model/full/pro"$projection_size".h"$hidden_size".mini"$minibatch_size".neuron"$neuron_type"_3"
+load_model="../../../lstm-lm/531-lstm/model/full/pro"$projection_size".h"$hidden_size".mini"$minibatch_size".neuron"$neuron_type""
 
 
 # train
