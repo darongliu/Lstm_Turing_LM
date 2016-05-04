@@ -192,8 +192,8 @@ class Model:
 		self.create_cost_fun()#create 2 cost func(lstm final)
 
 		self.lstm_lr = 0.01
-		self.turing_lr = 1e-6
-		self.all_lr = 1e-6
+		self.turing_lr = 0.01
+		self.all_lr = 0.01
 		self.create_training_function()#create 3 functions(lstm turing all)
 		self.create_predict_function()#create 2 predictions(lstm final)
 
@@ -214,10 +214,11 @@ class Model:
 		self.model = pickle.load(open(load_file, "rb"))
 		if os.path.isfile(load_file + '.turing') :
 			self.turing_params.load(load_file + '.turing')			
-#		else :
-#			print "no turing model!!!! pretrain with lstm param"
-#			self.turing_params['W_input_hidden'] = self.model.layers[-1].params[0].get_value().T #not sure
-#			self.turing_params['b_hidden_0'] = self.model.layers[-1].params[1].get_value()
+		else :
+			print "no turing model!!!! pretrain with lstm param"
+			self.turing_params['W_input_hidden'] = self.model.layers[-1].params[0].get_value().T #not sure
+			self.turing_params['W_read_hidden']  = self.model.layers[-1].params[0].get_value().T
+			self.turing_params['b_hidden_0'] = self.model.layers[-1].params[1].get_value()
 
 		# need to compile again for calculating predictions after loading lstm
 		self.srng = T.shared_randomstreams.RandomStreams(np.random.randint(0, 1024))
@@ -586,14 +587,15 @@ def training(args, vocab, train_data, train_lengths, valid_data, valid_lengths):
 			valid_ppl = valid_ppl + minibatch_valid_ppl * sum(lengths)
 			
 		# last minibatch
-		minibatch_idx = minibatch_idx + 1
-		n_rest_example = len(valid_lengths) - minibatch_size * minibatch_idx
-		minibatch_valid_data, lengths = get_minibatch(valid_data, valid_lengths, n_rest_example, minibatch_idx)
+		if (minibatch_idx + 1) * minibatch_size != len(valid_lengths):
+			minibatch_idx = minibatch_idx + 1
+			n_rest_example = len(valid_lengths) - minibatch_size * minibatch_idx
+			minibatch_valid_data, lengths = get_minibatch(valid_data, valid_lengths, n_rest_example, minibatch_idx)
 
-		minibatch_valid_ppl = ppl_fun(valid_data, valid_lengths)
-		valid_ppl = valid_ppl + minibatch_valid_ppl * sum(lengths)
+			minibatch_valid_ppl = model.ppl_fun(minibatch_valid_data, list(lengths))
+			valid_ppl = valid_ppl + minibatch_valid_ppl * sum(lengths)
+
 		valid_ppl = valid_ppl / sum(valid_lengths)
-		
 
 		print "\ntrain ppl: %f, valid ppl: %f" % (train_ppl, valid_ppl)
 
@@ -668,12 +670,14 @@ def testing(args, test_data, test_lengths):
 		test_ppl = test_ppl + minibatch_test_ppl * sum(lengths)
 		
 	# last minibatch
-	minibatch_idx = minibatch_idx + 1
-	n_rest_example = len(test_lengths) - minibatch_size * minibatch_idx
-	minibatch_test_data, lengths = get_minibatch(test_data, test_lengths, n_rest_example, minibatch_idx)
+	if (minibatch_idx + 1) * minibatch_size != len(test_lengths):
+		minibatch_idx = minibatch_idx + 1
+		n_rest_example = len(test_lengths) - minibatch_size * minibatch_idx
+		minibatch_test_data, lengths = get_minibatch(test_data, test_lengths, n_rest_example, minibatch_idx)
 
-	minibatch_test_ppl = ppl_fun(test_data, test_lengths)
-	test_ppl = test_ppl + minibatch_test_ppl * sum(lengths)
+		minibatch_test_ppl = model_load.ppl_fun(minibatch_test_data, list(lengths))
+		test_ppl = test_ppl + minibatch_test_ppl * sum(lengths)
+		
 	test_ppl = test_ppl / sum(test_lengths)
 
 	print "test ppl: %f" %test_ppl
