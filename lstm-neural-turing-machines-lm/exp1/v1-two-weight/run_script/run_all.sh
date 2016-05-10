@@ -7,11 +7,11 @@ train_method="ALL"
 projection_size=50
 hidden_size=50
 stack_size=1
-learning_rate=1e-4
+learning_rate=1e-3
 minibatch_size=100
 improvement_rate=0.005
 max_epoch=1000
-save_model="model/full/pro"$projection_size".h"$hidden_size".mini"$minibatch_size".neuron"$neuron_type""
+save_model="model/full/pro"$projection_size".h"$hidden_size".mini"$minibatch_size".neuron"$neuron_type"_3"
 load_model="../../../lstm-lm/531-lstm/model/full/pro"$projection_size".h"$hidden_size".mini"$minibatch_size".neuron"$neuron_type""
 
 
