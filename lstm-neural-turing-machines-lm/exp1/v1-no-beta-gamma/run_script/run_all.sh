@@ -16,7 +16,7 @@ load_model="../../../lstm-lm/531-lstm/model/full/pro"$projection_size".h"$hidden
 
 
 # train
-THEANO_FLAGS='floatX=float32,device=gpu6' python lm_v4.py --train $train_file --valid $valid_file --neuron-type $neuron_type --train-method $train_method --projection-size $projection_size --hidden-size $hidden_size --stack $stack_size --learning-rate $learning_rate --improvement-rate $improvement_rate --minibatch-size $minibatch_size --max-epoch $max_epoch --save-net $save_model --early-stop 0 --load-net $load_model
+THEANO_FLAGS='floatX=float32,device=gpu7' python lm_v4.py --train $train_file --valid $valid_file --neuron-type $neuron_type --train-method $train_method --projection-size $projection_size --hidden-size $hidden_size --stack $stack_size --learning-rate $learning_rate --improvement-rate $improvement_rate --minibatch-size $minibatch_size --max-epoch $max_epoch --save-net $save_model --early-stop 0 --load-net $load_model
 
 # test
 #python lm_v4.py --test $test_file --load-net $save_model
