@@ -15,3 +15,4 @@ experiment4:
 1.use output lstm hidden to generate distribution over others output lstm hidden
 2.head without beta and gamma
 3.train two additional weight, one for sim, one for attention generation
+4.<important>pre train init memory
