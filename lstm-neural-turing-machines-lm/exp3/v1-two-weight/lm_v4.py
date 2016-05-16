@@ -171,7 +171,7 @@ class Model:
                 self.turing_params = Parameters()
 		#init turing machine model
 		self.turing_updates , self.turing_predict = turing_model.build(self.turing_params , hidden_size , vocab_size)
-
+		self.hidden_size = hidden_size
 		# inputs are matrices of indices,
 		# each row is a sentence, each column a timestep
 		self._stop_word   = theano.shared(np.int32(999999999), name="stop word")
