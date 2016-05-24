@@ -493,7 +493,7 @@ def get_mask(minibatch_data, lengths):
 	for idx,l in enumerate(lengths):
 		for l_idx in range(l):
 			origin_mask[idx][l_idx] = 1
-	return origin_mask
+	return origin_mask[:,:,-1]
 
 def training(args, vocab, train_data, train_lengths, valid_data, valid_lengths):
 
