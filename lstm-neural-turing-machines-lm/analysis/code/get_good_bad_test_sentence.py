@@ -3,7 +3,7 @@ import heapq
 data_file = '../../../data/test.full'
 
 write_out_dir = '../data/'
-attention_ppl = write_out_dir + 'test_ppl_one_weight'
+attention_ppl = write_out_dir + 'test_ppl_one_weight_same'
 lstm_ppl = write_out_dir + 'test_ppl_lstm' 
 good_file = write_out_dir + 'good_test.full' 
 bad_file = write_out_dir +  'bad_test.full'
