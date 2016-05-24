@@ -54,6 +54,9 @@ def parse_args(parser):
 	parser.add_argument('--improvement-rate', action="store", dest='improvement_rate',
 						help='relative improvement for early stopping on ppl , default: 0.005 ', type=float, default=0.005)
 
+	parser.add_argument('--entropy-reg', action="store", dest='entropy_reg',
+						help='entropy regulizer, default: 0.001 ', type=float, default=0.001)
+
 	parser.add_argument('--minibatch-size', action="store", dest='minibatch_size',
 						help='minibatch size for training, default: 100', type=int, default=100)
 
@@ -157,7 +160,7 @@ class Model:
 	what size their memory should be, and how many
 	words can be predicted.
 	"""
-	def __init__(self, hidden_size, input_size, vocab_size, stack_size=1, celltype=LSTM):
+	def __init__(self, hidden_size, input_size, vocab_size, entropy_reg = 0.001, stack_size=1, celltype=LSTM):
 
 		# core layer in RNN/LSTM
 		self.model = StackedCells(input_size, celltype=celltype, layers =[hidden_size] * stack_size)
@@ -168,7 +171,8 @@ class Model:
 		# add a classifier:
 		self.model.layers.append(Layer(hidden_size, vocab_size, activation = softmax))
 
-                self.turing_params = Parameters()
+		self.entropy_reg = entropy_reg
+		self.turing_params = Parameters()
 		#init turing machine model
 		self.turing_updates , self.turing_predict = turing_model.build(self.turing_params , hidden_size , vocab_size)
 		self.hidden_size = hidden_size         
@@ -176,6 +180,7 @@ class Model:
 		# each row is a sentence, each column a timestep
 		self._stop_word   = theano.shared(np.int32(999999999), name="stop word")
 		self.for_how_long = T.ivector()
+		self.mask_matrix = T.imatrix()
 		self.input_mat = T.imatrix()
 		self.priming_word = T.iscalar()
 		self.srng = T.shared_randomstreams.RandomStreams(np.random.randint(0, 1024))
@@ -183,7 +188,7 @@ class Model:
 		# create symbolic variables for prediction:
 		#change by darong #issue : what is greedy
 		self.lstm_predictions = self.create_lstm_prediction()
-		self.final_predictions = self.create_final_prediction()
+		self.final_predictions,self.entropy = self.create_final_prediction()
 
 		# create symbolic variable for greedy search:
 		self.greedy_predictions = self.create_lstm_prediction(greedy=True)
@@ -225,7 +230,7 @@ class Model:
 		# need to compile again for calculating predictions after loading lstm
 		self.srng = T.shared_randomstreams.RandomStreams(np.random.randint(0, 1024))
 		self.lstm_predictions = self.create_lstm_prediction()
-		self.final_predictions = self.create_final_prediction()
+		self.final_predictions,self.entropy = self.create_final_prediction()
 		self.greedy_predictions = self.create_lstm_prediction(greedy=True)#can change to final
 		self.create_cost_fun()#create 2 cost func(lstm final)
 		self.lstm_lr = lr
@@ -333,10 +338,12 @@ class Model:
 			return result[0]
 		# softmaxes are the last layer of our network,
 		# and are at the end of our results list:
-                hidden_size = result[-2].shape[2]/2
-		turing_result = self.turing_predict(result[-2][:,:,hidden_size:]) 
+		hidden_size = result[-2].shape[2]/2
+		temp = self.turing_predict(result[-2][:,:,hidden_size:])
+		turing_result = temp[0]
+		entropy_result = temp[1]
 		#the last layer do transpose before compute
-		return turing_result.transpose((1,0,2))
+		return turing_result.transpose((1,0,2)),entropy_result.transpose((1,0))
 		# we reorder the predictions to be:
 		# 1. what row / example
 		# 2. what timestep
@@ -361,10 +368,13 @@ class Model:
 								for_how_long,
 								starting_when).sum()
 
+		zero_entropy = T.zeros_like(self.entropy)
+		real_entropy = T.switch(self.mask_matrix,self.entropy,zero_entropy)
+
 		self.final_cost = masked_loss(self.final_predictions,
 								what_to_predict,
 								for_how_long,
-								starting_when).sum()
+								starting_when).sum()+self.entropy_reg*real_entropy.sum()
 		
 	def create_predict_function(self):
 		self.lstm_pred_fun = theano.function(
@@ -396,7 +406,7 @@ class Model:
 		updates_turing = self.turing_updates(self.final_cost , lr=self.turing_lr)
 #		updates, _, _, _, _ = create_optimization_updates(self.cost, self.params, method="adadelta", lr=self.lr)
 		self.turing_update_fun = theano.function(
-			inputs=[self.input_mat, self.for_how_long],
+			inputs=[self.input_mat, self.for_how_long,self.mask_matrix],
 			outputs=self.final_cost,
 			updates=updates_turing,
                         mode=NanGuardMode(nan_is_error=True, inf_is_error=True, big_is_error=True),
@@ -409,7 +419,7 @@ class Model:
                     updates_all[pair[0]] = pair[1]
 
 		self.all_update_fun = theano.function(
-			inputs=[self.input_mat, self.for_how_long],
+			inputs=[self.input_mat, self.for_how_long,self.mask_matrix],
 			outputs=self.final_cost,
 			updates=updates_all,
 			allow_input_downcast=True)
@@ -478,6 +488,13 @@ def get_minibatch(full_data, full_lengths, minibatch_size, minibatch_idx):
 
 	return minibatch_data, lengths
 
+def get_mask(minibatch_data, lengths):
+	origin_mask = np.zeros_like(minibatch_data)
+	for idx,l in enumerate(lengths):
+		for l_idx in range(l):
+			origin_mask[idx][l_idx] = 1
+	return origin_mask
+
 def training(args, vocab, train_data, train_lengths, valid_data, valid_lengths):
 
 	# training information
@@ -497,6 +514,7 @@ def training(args, vocab, train_data, train_lengths, valid_data, valid_lengths):
 	print 'minibatch size: %d' % args.minibatch_size
 	print 'max epoch: %d' % args.max_epoch
 	print 'improvement rate: %f' % args.improvement_rate
+	print 'entropy reg: %f' % args.entropy_reg
 	print 'save file: %s' % args.save_net
 	print 'load_model: %s' % args.load_net
 	print 'early-stop: %r' % args.early_stop
@@ -513,6 +531,7 @@ def training(args, vocab, train_data, train_lengths, valid_data, valid_lengths):
 		input_size=args.n_projection,
 		hidden_size=args.n_hidden,
 		vocab_size=len(vocab),
+		entropy_reg = args.entropy_reg,
 		stack_size=args.n_stack, # make this bigger, but makes compilation slow
 		celltype=celltype # use RNN or LSTM
 	)
@@ -560,7 +579,8 @@ def training(args, vocab, train_data, train_lengths, valid_data, valid_lengths):
 		train_ppl = 0
 		for minibatch_idx in range(n_train_batches):
 			minibatch_train_data, lengths = get_minibatch(train_data, train_lengths, minibatch_size, minibatch_idx)
-			error = update_fun(minibatch_train_data , list(lengths) )
+			mask = get_mask(minibatch_train_data, lengths)
+			error = update_fun(minibatch_train_data , list(lengths) ,mask)
 			minibatch_train_ppl = ppl_fun(minibatch_train_data, list(lengths))
 			train_ppl = train_ppl + minibatch_train_ppl * sum(lengths)
 			sys.stdout.write( '\n%d minibatch idx / %d total minibatch, ppl: %f '% (minibatch_idx+1, n_train_batches, minibatch_train_ppl) )
@@ -571,8 +591,9 @@ def training(args, vocab, train_data, train_lengths, valid_data, valid_lengths):
 			minibatch_idx = minibatch_idx + 1
 			n_rest_example = len(train_lengths) - minibatch_size * minibatch_idx
 			minibatch_train_data, lengths = get_minibatch(train_data, train_lengths, n_rest_example, minibatch_idx)
+			mask = get_mask(minibatch_train_data, lengths)
 	
-			error = update_fun(minibatch_train_data , list(lengths) )
+			error = update_fun(minibatch_train_data , list(lengths) ,mask)
 			minibatch_train_ppl = ppl_fun(minibatch_train_data, list(lengths))
 			train_ppl = train_ppl + minibatch_train_ppl * sum(lengths)
 

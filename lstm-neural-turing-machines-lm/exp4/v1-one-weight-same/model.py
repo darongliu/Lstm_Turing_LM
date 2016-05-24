@@ -70,13 +70,15 @@ def build_step(P, controller,
                 weight_inter, M_curr , head, input_curr)
 
         weight_curr = weight_inter
+        entropy_temp = -1*(weight_curr*T.log(weight_curr))
+        entropy = T.sum(entropy_temp , axis=1)
         att_w_curr  = att_w_inter
 
         att_M_curr = att_w_curr.dimshuffle(0,'x',1)*M_curr
         read_curr = build_read(att_M_curr, weight_curr)
         output = controller(input_curr, read_curr)
 
-        return output
+        return output,entropy
     return step
 
 
