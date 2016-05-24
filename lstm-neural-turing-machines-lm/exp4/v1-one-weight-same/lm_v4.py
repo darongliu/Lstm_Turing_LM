@@ -491,9 +491,9 @@ def get_minibatch(full_data, full_lengths, minibatch_size, minibatch_idx):
 def get_mask(minibatch_data, lengths):
 	origin_mask = np.zeros_like(minibatch_data)
 	for idx,l in enumerate(lengths):
-		for l_idx in range(l):
+		for l_idx in range(l-1):
 			origin_mask[idx][l_idx] = 1
-	return origin_mask[:,:,-1]
+	return origin_mask[:,:-1]
 
 def training(args, vocab, train_data, train_lengths, valid_data, valid_lengths):
 
