@@ -8,8 +8,9 @@ hidden_size=50
 stack_size=1
 learning_rate=0
 minibatch_size=100
+entropy_reg=0.1
 max_epoch=1000
-save_model="model/full/pro"$projection_size".h"$hidden_size".mini"$minibatch_size".neuron"$neuron_type""
+save_model="model/full/pro"$projection_size".h"$hidden_size".mini"$minibatch_size".reg"$entropy_reg".neuron"$neuron_type""
 #load_model=""
 
 
