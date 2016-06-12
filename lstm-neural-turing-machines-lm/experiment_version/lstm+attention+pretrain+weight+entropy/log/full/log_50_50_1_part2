@@ -1,0 +1,160 @@
+Using gpu device 0: GeForce GTX 660 (CNMeM is disabled, CuDNN not available)
+training information
+-------------------------------------------------------
+method: ALL
+vocab size: 10001
+sentences in training file: 41668
+max length in training file: 50
+train file: ../../../data/train.full
+valid file: ../../../data/valid.full
+type: LSTM
+project: 50
+hidden: 50
+stack: 1
+learning rate: 0.000100
+minibatch size: 100
+max epoch: 1000
+improvement rate: 0.005000
+entropy reg: 1.000000
+save file: model/full/pro50.h50.mini100.reg1.neuronLSTM
+load_model: model/full/pro50.h50.mini100.reg1.neuronLSTM
+early-stop: 0
+-------------------------------------------------------
+start initializing model
+done loading model
+update all learning rate : 0.000100
+start training
+
+epoch 0
+
+1 minibatch idx / 416 total minibatch, ppl: 80.249191 
+2 minibatch idx / 416 total minibatch, ppl: 72.326790 
+3 minibatch idx / 416 total minibatch, ppl: 82.026352 
+4 minibatch idx / 416 total minibatch, ppl: 78.620544 
+5 minibatch idx / 416 total minibatch, ppl: 102.996597 
+6 minibatch idx / 416 total minibatch, ppl: 104.800201 
+7 minibatch idx / 416 total minibatch, ppl: 104.485352 
+8 minibatch idx / 416 total minibatch, ppl: 131.194168 
+9 minibatch idx / 416 total minibatch, ppl: 98.167732 
+10 minibatch idx / 416 total minibatch, ppl: 80.333107 
+11 minibatch idx / 416 total minibatch, ppl: 66.264069 
+12 minibatch idx / 416 total minibatch, ppl: 76.826851 
+13 minibatch idx / 416 total minibatch, ppl: 76.675331 
+14 minibatch idx / 416 total minibatch, ppl: 51.013523 
+15 minibatch idx / 416 total minibatch, ppl: 96.153801 
+16 minibatch idx / 416 total minibatch, ppl: 102.855553 
+17 minibatch idx / 416 total minibatch, ppl: 111.182083 
+18 minibatch idx / 416 total minibatch, ppl: 100.609444 
+19 minibatch idx / 416 total minibatch, ppl: 83.458679 
+20 minibatch idx / 416 total minibatch, ppl: 100.734009 
+21 minibatch idx / 416 total minibatch, ppl: 106.144318 
+22 minibatch idx / 416 total minibatch, ppl: 85.631622 
+23 minibatch idx / 416 total minibatch, ppl: 66.844742 
+24 minibatch idx / 416 total minibatch, ppl: 110.956253 
+25 minibatch idx / 416 total minibatch, ppl: 103.260628 
+26 minibatch idx / 416 total minibatch, ppl: 115.187363 
+27 minibatch idx / 416 total minibatch, ppl: 117.150864 
+28 minibatch idx / 416 total minibatch, ppl: 42.381653 
+29 minibatch idx / 416 total minibatch, ppl: 64.156906 
+30 minibatch idx / 416 total minibatch, ppl: 78.626244 
+31 minibatch idx / 416 total minibatch, ppl: 53.665264 
+32 minibatch idx / 416 total minibatch, ppl: 60.149479 
+33 minibatch idx / 416 total minibatch, ppl: 55.480667 
+34 minibatch idx / 416 total minibatch, ppl: 54.127598 
+35 minibatch idx / 416 total minibatch, ppl: 36.712902 
+36 minibatch idx / 416 total minibatch, ppl: 61.138687 
+37 minibatch idx / 416 total minibatch, ppl: 93.976936 
+38 minibatch idx / 416 total minibatch, ppl: 70.835464 
+39 minibatch idx / 416 total minibatch, ppl: 53.745647 
+40 minibatch idx / 416 total minibatch, ppl: 126.547249 
+41 minibatch idx / 416 total minibatch, ppl: 110.718636 
+42 minibatch idx / 416 total minibatch, ppl: 36.110325 
+43 minibatch idx / 416 total minibatch, ppl: 54.392582 
+44 minibatch idx / 416 total minibatch, ppl: 61.064888 
+45 minibatch idx / 416 total minibatch, ppl: 107.795029 
+46 minibatch idx / 416 total minibatch, ppl: 61.859638 
+47 minibatch idx / 416 total minibatch, ppl: 85.525444 
+48 minibatch idx / 416 total minibatch, ppl: 81.787292 
+49 minibatch idx / 416 total minibatch, ppl: 75.304901 
+50 minibatch idx / 416 total minibatch, ppl: 54.379406 
+51 minibatch idx / 416 total minibatch, ppl: 92.844513 
+52 minibatch idx / 416 total minibatch, ppl: 106.093018 
+53 minibatch idx / 416 total minibatch, ppl: 96.175621 
+54 minibatch idx / 416 total minibatch, ppl: 99.290054 
+55 minibatch idx / 416 total minibatch, ppl: 114.992767 
+56 minibatch idx / 416 total minibatch, ppl: 101.401001 
+57 minibatch idx / 416 total minibatch, ppl: 111.644600 
+58 minibatch idx / 416 total minibatch, ppl: 87.439888 
+59 minibatch idx / 416 total minibatch, ppl: 92.026199 
+60 minibatch idx / 416 total minibatch, ppl: 95.696480 
+61 minibatch idx / 416 total minibatch, ppl: 68.513428 
+62 minibatch idx / 416 total minibatch, ppl: 70.257477 
+63 minibatch idx / 416 total minibatch, ppl: 63.291336 
+64 minibatch idx / 416 total minibatch, ppl: 59.608692 
+65 minibatch idx / 416 total minibatch, ppl: 70.654716 
+66 minibatch idx / 416 total minibatch, ppl: 72.413239 
+67 minibatch idx / 416 total minibatch, ppl: 63.740368 
+68 minibatch idx / 416 total minibatch, ppl: 58.369217 
+69 minibatch idx / 416 total minibatch, ppl: 39.740894 
+70 minibatch idx / 416 total minibatch, ppl: 69.546951 
+71 minibatch idx / 416 total minibatch, ppl: 94.926048 
+72 minibatch idx / 416 total minibatch, ppl: 85.650528 
+73 minibatch idx / 416 total minibatch, ppl: 62.135014 
+74 minibatch idx / 416 total minibatch, ppl: 48.090759 
+75 minibatch idx / 416 total minibatch, ppl: 80.850754 
+76 minibatch idx / 416 total minibatch, ppl: 84.256844 
+77 minibatch idx / 416 total minibatch, ppl: 93.607735 
+78 minibatch idx / 416 total minibatch, ppl: 108.408592 
+79 minibatch idx / 416 total minibatch, ppl: 82.232666 
+80 minibatch idx / 416 total minibatch, ppl: 113.168839 
+81 minibatch idx / 416 total minibatch, ppl: 71.196815 
+82 minibatch idx / 416 total minibatch, ppl: 89.095375 
+83 minibatch idx / 416 total minibatch, ppl: 85.986496 
+84 minibatch idx / 416 total minibatch, ppl: 108.557938 
+85 minibatch idx / 416 total minibatch, ppl: 102.853004 
+86 minibatch idx / 416 total minibatch, ppl: 86.270035 
+87 minibatch idx / 416 total minibatch, ppl: 97.429520 
+88 minibatch idx / 416 total minibatch, ppl: 57.847420 
+89 minibatch idx / 416 total minibatch, ppl: 77.137062 
+90 minibatch idx / 416 total minibatch, ppl: 122.157608 
+91 minibatch idx / 416 total minibatch, ppl: 89.151047 
+92 minibatch idx / 416 total minibatch, ppl: 80.974289 
+93 minibatch idx / 416 total minibatch, ppl: 59.758274 
+94 minibatch idx / 416 total minibatch, ppl: 70.010201 
+95 minibatch idx / 416 total minibatch, ppl: 68.670135 
+96 minibatch idx / 416 total minibatch, ppl: 56.509624 
+97 minibatch idx / 416 total minibatch, ppl: 61.317337 
+98 minibatch idx / 416 total minibatch, ppl: 98.989433 
+99 minibatch idx / 416 total minibatch, ppl: 76.009567 
+100 minibatch idx / 416 total minibatch, ppl: 71.933914 
+101 minibatch idx / 416 total minibatch, ppl: 92.686287 
+102 minibatch idx / 416 total minibatch, ppl: 64.617310 
+103 minibatch idx / 416 total minibatch, ppl: 85.820969 
+104 minibatch idx / 416 total minibatch, ppl: 115.842293 
+105 minibatch idx / 416 total minibatch, ppl: 63.121593 
+106 minibatch idx / 416 total minibatch, ppl: 149.941223 
+107 minibatch idx / 416 total minibatch, ppl: 120.119370 
+108 minibatch idx / 416 total minibatch, ppl: 72.575676 
+109 minibatch idx / 416 total minibatch, ppl: 72.130554 
+110 minibatch idx / 416 total minibatch, ppl: 88.689522 
+111 minibatch idx / 416 total minibatch, ppl: 87.750641 
+112 minibatch idx / 416 total minibatch, ppl: 69.437263 
+113 minibatch idx / 416 total minibatch, ppl: 60.648468 
+114 minibatch idx / 416 total minibatch, ppl: 103.874832 
+115 minibatch idx / 416 total minibatch, ppl: 94.901840 
+116 minibatch idx / 416 total minibatch, ppl: 128.432068 
+117 minibatch idx / 416 total minibatch, ppl: 56.381073 
+118 minibatch idx / 416 total minibatch, ppl: 81.454834 
+119 minibatch idx / 416 total minibatch, ppl: 65.957092 
+120 minibatch idx / 416 total minibatch, ppl: 81.256371 
+121 minibatch idx / 416 total minibatch, ppl: 82.820305 
+122 minibatch idx / 416 total minibatch, ppl: 76.365875 
+123 minibatch idx / 416 total minibatch, ppl: 86.523155 
+124 minibatch idx / 416 total minibatch, ppl: 88.635201 
+125 minibatch idx / 416 total minibatch, ppl: 69.672546 
+126 minibatch idx / 416 total minibatch, ppl: 67.959381 
+127 minibatch idx / 416 total minibatch, ppl: 47.454594 
+128 minibatch idx / 416 total minibatch, ppl: 69.158974 
+129 minibatch idx / 416 total minibatch, ppl: 61.104969 
+130 minibatch idx / 416 total minibatch, ppl: 64.902702 
+131 minibatch idx / 416 total minibatch, ppl: 58.523754 
